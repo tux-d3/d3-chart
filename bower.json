@@ -1,0 +1,26 @@
+{
+  "name": "d3-plot",
+  "homepage": "https://github.com/tux-d3/d3-plot",
+  "authors": [
+    "Ahmed Masud <ahmed.masud@trustifier.com>"
+  ],
+  "description": "TUX-D3 d3-plot element",
+  "main": "d3-plot.html",
+  "moduleType": [],
+  "keywords": [
+    "d3js",
+    "tux-d3",
+    "d3-plot",
+    "webcomponents",
+    "trustifier",
+    "tux"
+  ],
+  "license": "BSD-3-Clause",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
