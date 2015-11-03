@@ -1,16 +1,16 @@
 {
-  "name": "d3-plot",
-  "homepage": "https://github.com/tux-d3/d3-plot",
+  "name": "d3-chart",
+  "homepage": "https://github.com/tux-d3/d3-chart",
   "authors": [
     "Ahmed Masud <ahmed.masud@trustifier.com>"
   ],
-  "description": "TUX-D3 d3-plot element",
-  "main": "d3-plot.html",
+  "description": "TUX-D3 d3-chart element",
+  "main": "d3-chart.html",
   "moduleType": [],
   "keywords": [
     "d3js",
     "tux-d3",
-    "d3-plot",
+    "d3-chart",
     "webcomponents",
     "trustifier",
     "tux"
