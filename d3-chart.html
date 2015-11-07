@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../tux-d3/tux-d3.html">
+<link rel="import" href="../d3-data-broker-behavior/d3-data-broker-behavior.html">
 <dom-module id='d3-chart'>
     <template>
         <style>
@@ -19,95 +20,41 @@
             text-anchor: center;
         }
         </style>
-        <svg id='chart'></svg>
+        <content select='d3-data-source'></content>
+        <svg id='chartViewPort'></svg>
+        <content select=':not(d3-data-source)'></content>
     </template>
     <script>
     Polymer({
         is: 'd3-chart',
-        properties: {
 
-            barHeight: {
-                type: Number,
-                value: 20,
-                notify: true,
-            },
-
-            data: {
-                type: Array,
-                value: function() {
-                    return [];
-                },
-                notify: true,
-                reflectToAttribute: true
-            },
-
-            width: {
-                type: Number,
-                value: 420,
-                notify: true
-            }
+        width: {
+            type: Number,
+            value: 640,
+            notify: true
         },
 
-        observers: [ '_refresh(barHeight, data.splices, width)' ],
+        height: {
+            type: Number,
+            value: 400,
+            notify: true
+        },
+
+
+        ready: function() {
+            var self = this;
+        },
 
         attached: function() {
-            var self = this;
-            self.async(self._refresh);
-        },
-        _refresh: function(barHeight, data, width) {
-            var self = this;
-            self._drawChart();
+
         },
 
-        _drawChart: function() {
-            var self = this;
-
-
-            var chart = d3.select(self.$.chart)
-                .attr("width", self.width)
-                .attr("height", self.barHeight * self.data.length);
-
-            if(self.data.length === 0) {
-                chart.attr("height", 40);
-                chart.append("text")
-                    .attr("id", "noData")
-                    .attr("x", "50%")
-                    .attr("y", "30")
-                    .text("No Data");
-                return ;
-            }
-
-            chart.select("#noData").remove();
-
-            var groups = chart.selectAll("g")
-                .data(self.data, function(d, i) { return i; });
-
-            var bar = groups.enter().append("g");
-
-            bar.append("rect");
-            bar.append("text");
-
-
-            var x = d3.scale.linear()
-                    .domain([0, d3.max(self.data)])
-                    .range([0, self.width]);
-
-
-            var bars = chart.selectAll('g');
-            bars.attr("transform", function(d, i) { return "translate(0," + i * self.barHeight + ")"; });
-            bars.selectAll('rect')
-                .attr('width', function(d) { return x(d); })
-                .attr("height", self.barHeight - 1);
-
-            bars.selectAll('text')
-                .attr("x", function(d) { return x(d) - 3; })
-                .attr("y", self.barHeight / 2)
-                .attr("dy", ".35em")
-                .text(function(d) { return d; });
-
-            groups.exit().remove();
-
-        }
+        _refresh: function() {
+          var chart = d3.select(self.$.chart)
+              .attr("width", self.width)
+              .attr("height", self.height);
+        },
+        behaviors: [ TuxD3.DataBrokerBehavior ]
     });
     </script>
 </dom-module>
