@@ -1,60 +1,125 @@
+<!--
+@license
+Copyright (C) 2015 TuxD3 Authors
+This code may only be used under the BSD style license found at https://tux-d3.github.io/LICENSE.txt
+The complete set of authors may be found at https://tux-d3.github.io/AUTHORS.txt
+The complete set of contributors may be found at https://tux-d3.github.io/CONTRIBUTORS.txt
+-->
+
+<!--
+An element used to create a d3js chart
+
+It creates the base chart on which other d3-* elements draw themselves.
+
+```html
+    <d3-chart data='[[data]]'>
+        <d3-bar-graph></d3-bar-graph>
+    </d3-chart>
+```
+
+
+@element d3-chart
+@description A custom element used to create d3js charts
+@keywords d3js, tux, tux-d3, webcomponents
+@group Visual elements
+@homepage https://github.com/tux-d3/d3-chart
+@repository https://github.com/tux-d3/d3-chart
+@demo /demo/d3-chart
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency tux-d3  tux-d3/tux-d3#^0.1.0
+-->
+
+
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../tux-d3/tux-d3.html">
 <link rel="import" href="../d3-data-broker-behavior/d3-data-broker-behavior.html">
+<link rel="import" href="../d3-report-resize-behavior/d3-report-resize-behavior.html">
 <dom-module id='d3-chart'>
     <template>
         <style>
-        :host ::content #chart rect {
+        :host ::content #viewPort {
+            border: 1px solid gray;
+            width: 100%;
+        }
+
+        :host ::content #viewPort rect {
           fill: steelblue;
         }
 
-        :host ::content #chart text {
+        :host ::content #viewPort text {
           fill: white;
           font: 10px sans-serif;
           text-anchor: end;
         }
 
-        :host ::content #chart text#noData {
+        :host ::content #viewPort text#noData {
             fill: gray;
             font: 22px "Roboto";
             text-anchor: center;
         }
         </style>
         <content select='d3-data-source'></content>
-        <svg id='chartViewPort'></svg>
+        <svg id='viewPort'></svg>
         <content select=':not(d3-data-source)'></content>
     </template>
     <script>
     Polymer({
         is: 'd3-chart',
+        properties: {
+            /**
+             * sets the chart width
+             *
+             * @attribute width
+             * @type Number
+             * @default 640
+             * @notifies
+             * @reflectsToAttribute
+             */
 
-        width: {
-            type: Number,
-            value: 640,
-            notify: true
+            width: {
+                type: Number,
+                value: 640,
+                notify: true,
+                reflectToAttribute: true
+            },
+
+            /**
+             * sets the chart height
+             *
+             * @attribute height
+             * @type Number
+             * default 480
+             * @notifies
+             */
+
+            height: {
+                type: Number,
+                value: 480,
+                notify: true,
+                reflectToAttribute: true
+            },
         },
 
-        height: {
-            type: Number,
-            value: 400,
-            notify: true
+        listeners: {
+            'resize': '_handleResize'
         },
 
+        observers: [
+            '_refresh(width,height)'
+        ],
 
-        ready: function() {
+        _refresh: function(width, height) {
             var self = this;
+            var chart = d3.select(self.$.viewPort)
+                .attr("width", self.width)
+                .attr("height", self.height);
         },
 
-        attached: function() {
-
+        getViewPort: function() {
+            return this.$.viewPort;
         },
 
-        _refresh: function() {
-          var chart = d3.select(self.$.chart)
-              .attr("width", self.width)
-              .attr("height", self.height);
-        },
-        behaviors: [ TuxD3.DataBrokerBehavior ]
+        behaviors: [ TuxD3.DataBrokerBehavior, TuxD3.ResizeableBehavior ]
     });
     </script>
 </dom-module>

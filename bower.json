@@ -22,5 +22,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "d3-resizeable-behavior": "tux-d3/d3-resizeable-behavior"
+  }
 }
